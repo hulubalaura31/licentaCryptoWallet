@@ -70,6 +70,7 @@
     "react-native-dotenv": "2.4.3",
     "react-native-elements": "^3.4.2",
     "react-native-emoji-selector": "^0.2.0",
+    "react-native-fs": "^2.19.0",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-get-random-values": "1.5.0",
     "react-native-haptic-feedback": "^1.13.1",
