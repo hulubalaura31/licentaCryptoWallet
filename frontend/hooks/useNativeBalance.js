@@ -4,12 +4,12 @@ import {useMoralisDapp} from '../providers/MoralisDappProvider/MoralisDappProvid
 import {getNativeByChain} from '../utils/getNativeByChain';
 import {n4} from '../utils/formatters';
 
+
 const useNativeBalance = chain => {
   const {isInitialized, Moralis} = useMoralis();
   const {account} = useMoralisWeb3Api();
   const {walletAddress, chainId} = useMoralisDapp();
   const [nativeBalance, setNativeBalance] = useState();
-  const [assets, setAssets] = useState();
 
   useEffect(() => {
     if (isInitialized) {
