@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, Image, FlatList } from 'react-native';
 import { getMarketNews } from '../../hooks/retrieveNews';
 import NewsItem from './NewsItem'
@@ -14,7 +14,7 @@ const News = () => {
       
       fetchMarketData();
     }, [])
-  console.log(data)
+  //console.log(data)
   return (
     <SafeAreaView style={styles.itemContainer}>
       <FlatList data={data} renderItem={({item}) => <NewsItem marketNews={item} /> } />

@@ -2,19 +2,15 @@ import 'react-native-reanimated'
 import React from "react";
 import { useMoralis } from "react-moralis";
 import { useWalletConnect } from "./WalletConnect";
-import {
-  NavigationContainer,
-  getFocusedRouteNameFromRoute,
-} from "@react-navigation/native";
+import {NavigationContainer} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LogBox } from "react-native";
-
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import CryptoAuth from "./Components/CryptoAuth";
 import RecentTransactions from "./Components/RecentTransactions/RecentTransactions";
 import Assets from "./Components/Assets/Assets";
 import Transfer from "./Components/Transfer/Transfer";
-import Profile from "./Components/Profile/Profile";
+import Profile from "./Components/Learn/Learn";
 import Header from "./Components/Graphs/customControls/Header";
 import GraphsAssets from "./Components/Graphs/GraphsAssetsMainScreen";
 import News from "./Components/Assets/News";
@@ -25,15 +21,12 @@ import {
   faCreditCard,
   faCoins,
   faUser,
-  faPaperPlane,
-  faChartBar
+  faChartBar,
+  faChalkboardTeacher
 } from "@fortawesome/free-solid-svg-icons";
-
-import Moralis from "moralis/types";
 
 LogBox.ignoreAllLogs();
 
-// const Activecolor =
 function Home(): JSX.Element {
   return (
     <Tab.Navigator
@@ -75,9 +68,9 @@ function Home(): JSX.Element {
       <Tab.Screen
         name="Profile"
         options={{
-          tabBarLabel: "Profile",
+          tabBarLabel: "Learn",
           tabBarIcon: ({ color }) => (
-            <FontAwesomeIcon icon={faUser} color={color} size={20} />
+            <FontAwesomeIcon icon={faChalkboardTeacher} color={color} size={20} />
           ),
         }}
         component={Profile}

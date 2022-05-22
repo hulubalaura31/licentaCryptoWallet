@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, Image, FlatList, Button } from 'react-native';
-import CoinItem from './CoinItem';
+import CoinItem from './GraphListItem';
 import dummy1 from './testData/dummy2Cryptocurrencies.json'
 import { getMarketData } from '../../hooks/retrieveCryptoPrices';
 import { SearchBar } from 'react-native-elements';
@@ -25,7 +25,6 @@ const GraphsAssets = (props) => {
 
   updateSearch = (event) => {
     setSearch(event);
-    console.log(event)
     if(event){
       setFilteredData(data.filter(x => x.name.includes(event)))
     }else if(event == '' || event == null || event == undefined){

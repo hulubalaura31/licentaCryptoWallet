@@ -1,27 +1,25 @@
-import React, { useState } from "react";
-import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View, Linking, Button } from "react-native";
+import React, { useState, useEffect } from "react";
+import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View, Linking } from "react-native";
 import { useMoralisDapp } from '../../providers/MoralisDappProvider/MoralisDappProvider';
 import eth from './eth-blue.png'
 import coins from './coins.png'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMoneyCheck, faPaperPlane, faRetweet, faInfo } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyCheck, faPaperPlane, faInfo } from '@fortawesome/free-solid-svg-icons';
 import Balance from "./Balance";
 import Popover from 'react-native-popover-view';
-import { getFaucet } from "../../helpers/networks";
+import { getFaucet } from "../../helpers/networkDefaultConfig";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Assets() {
   const { walletAddress, chainId } = useMoralisDapp();
   const [color, setColor] = useState("white");
-  const picture = chainId == "0x1" || "0x3" ? eth : coins;
-  const allChains = ["0x3", "0x4", "0x2a", "0x5", "0xa86a", "0x61", "0x13881"]
-  const enableSwap = allChains.indexOf(chainId) > -1 ? false : true
-  const swapColor = enableSwap ? "#0B3066" : "#7495c5"
-  const onPressGoToFaucet = () => {
+  const picture = chainId == "0x1" || "0x3" || "0x4" || "0x2a" || "0x5" ? eth : coins;
+  const handleGoToFaucet = () => {
     Linking.openURL(
       `${getFaucet(chainId)}`
     )
   }
+
 
   const navigation = useNavigation();
 
@@ -32,7 +30,6 @@ export default function Assets() {
   const handleGoToNews = () => {
     navigation.navigate("News")
   }
-
 
   return (
     <SafeAreaView style={styles.areaContainer}>
@@ -47,7 +44,7 @@ export default function Assets() {
             </TouchableOpacity>
           )} >
           <Text style={styles.faucetText}>Get coins directly from the primarly faucet</Text>
-          <TouchableOpacity onPress={() => onPressGoToFaucet()} style={styles.faucetButton}>
+          <TouchableOpacity onPress={() => handleGoToFaucet()} style={styles.faucetButton}>
             <Text style={{ alignSelf: 'center', color: 'white', paddingTop: 5 }}>Faucet</Text>
           </TouchableOpacity>
         </Popover>
@@ -55,18 +52,7 @@ export default function Assets() {
           <FontAwesomeIcon icon={faPaperPlane} size={40} color={color} style={{ alignSelf: 'center' }} />
           <Text style={{ alignSelf: 'center', color: 'white' }}>SEND</Text>
         </TouchableOpacity>
-        <Popover popoverStyle={{ width: 260, height: 100, borderRadius: 30 }}
-          from={(
-            <TouchableOpacity style={styles.buttonSwap} enable={enableSwap} backgroundColor={swapColor}>
-              <FontAwesomeIcon icon={faRetweet} size={40} color={color} style={{ alignSelf: 'center' }} />
-              <Text style={{ alignSelf: 'center', color: 'white' }}>SWAP</Text>
-            </TouchableOpacity>
-          )} >
-          <Text style={styles.faucetText}>Swap is available only on Mainnets</Text>
-        </Popover>
-      </View>
-      <View style={styles.newsContainer}>
-      <TouchableOpacity style={styles.infoButton} enable={enableSwap} backgroundColor={swapColor} onPress={handleGoToNews}>
+        <TouchableOpacity style={styles.infoButton} onPress={handleGoToNews}>
               <FontAwesomeIcon icon={faInfo} size={40} color={color} style={{ alignSelf: 'center' }} />
               <Text style={{ alignSelf: 'center', color: 'white' }}>News</Text>
         </TouchableOpacity>
@@ -86,7 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     paddingHorizontal: 40,
-    paddingBottom: 30
+    paddingBottom: 70
   },
   buttons: {
     backgroundColor: "#0B3066",
@@ -112,14 +98,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: 150,
     alignSelf: 'center'
-  },
-  newsContainer:{
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: "row",
-    justifyContent: 'space-between',
-    paddingHorizontal: 150,
-    paddingBottom: 100
   },
   infoButton:{
     backgroundColor: "#4c8ce8",

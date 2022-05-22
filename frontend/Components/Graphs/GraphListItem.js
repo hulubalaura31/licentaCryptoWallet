@@ -36,7 +36,7 @@ const CoinItem = ({ marketCoin }) => {
     const transformData = (data) => {
         let x = [];
         data.map((each, index) => {
-                x.push(each)
+            x.push(each)
         })
         var copy = [...x];
         useEffect(() => {
@@ -44,10 +44,10 @@ const CoinItem = ({ marketCoin }) => {
         }, [])
 
         var RSIvalues = [];
-        for(var i = x.length ; i >= 0; i --){
+        for (var i = x.length; i >= 0; i--) {
             var result = calculateRSI(x, 100);
             RSIvalues.push(result);
-            x.splice(0,1);
+            x.splice(0, 1);
         }
         //console.log(RSIvalues);
         useEffect(() => {
@@ -59,27 +59,24 @@ const CoinItem = ({ marketCoin }) => {
     const calculateRSI = (prices, Tolerance) => {
         var sumGain = 0;
         var sumLoss = 0;
-        for (var i = 1; i < prices.length; i++)
-        {
+        for (var i = 1; i < prices.length; i++) {
             var difference = prices[i] - prices[i - 1];
-            if (difference >= 0)
-            {
+            if (difference >= 0) {
                 sumGain += difference;
             }
-            else
-            {
+            else {
                 sumLoss -= difference;
             }
         }
-    
+
         if (sumGain == 0) return 0;
         if (Math.abs(sumLoss) >= Tolerance) return 100;
-    
+
         var relativeStrength = sumGain / sumLoss;
-    
+
         return 100.0 - (100.0 / (1 + relativeStrength));
     }
- 
+
 
 
     return (
@@ -92,17 +89,18 @@ const CoinItem = ({ marketCoin }) => {
                     >
                         <Image source={{ uri: image }} style={{ height: 55, width: 55, marginLeft: 10, alignSelf: 'center' }}></Image>
                         <View>
-                            <Text style={styles.coin}>{name}</Text>
+                            <Text style={styles.nameAndSymbol}>{name}</Text>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.number}>{market_cap_rank}</Text>
-                                <Text style={styles.coin}>{symbol.toUpperCase()}</Text>
-                                <FontAwesomeIcon icon={price_change_percentage_24h < 0 ? faArrowDown : faArrowUp} size={15} color={price_change_percentage_24h < 0 ? 'red' : 'green'} style={{ alignSelf: 'center', marginRight: 5 }} />
-                                <Text style={styles.coin} >{price_change_percentage_24h.toFixed(2)}%</Text>
+                                <Text style={styles.nameAndSymbol}>{symbol.toUpperCase()}</Text>
                             </View>
                         </View>
-                        <View style={{ marginLeft: 'auto' }}>
-                            <Text style={styles.coin}>{current_price}$</Text>
-                            <Text style={styles.coin}>M. Cap:{formatMarketCap(market_cap)}</Text>
+                        <View style={{ marginLeft: 'auto', display: "flex", alignItems: "flex-end" }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.coin}>{current_price}$</Text>
+                                <FontAwesomeIcon icon={price_change_percentage_24h < 0 ? faArrowDown : faArrowUp} size={15} color={price_change_percentage_24h < 0 ? 'red' : 'green'}  />
+                                <Text style={styles.priceChange} >{price_change_percentage_24h.toFixed(2)}%</Text>
+                            </View>
+                            <Text style={{ display: "flex", alignItems: "flex-end" }}>M. Cap:{formatMarketCap(market_cap)}</Text>
                         </View>
                     </TouchableOpacity>
                 )} >
@@ -120,7 +118,7 @@ const CoinItem = ({ marketCoin }) => {
                             width={370}
                             height={220}
                             chartConfig={{
-                                decimalPlaces: 2, 
+                                decimalPlaces: 2,
                                 color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                 style: {
@@ -138,7 +136,7 @@ const CoinItem = ({ marketCoin }) => {
                                 borderRadius: 0
                             }}
                         />
-                        <Text style={{paddingTop: 10, fontWeight: 'bold'}}>Relative Strength Index (RSI)</Text>
+                        <Text style={{ paddingTop: 10, fontWeight: 'bold' }}>Relative Strength Index (RSI)</Text>
                         <LineChart
                             data={{
                                 datasets: [
@@ -183,7 +181,8 @@ const styles = StyleSheet.create({
     coin: {
         fontSize: 15,
         fontWeight: 'bold',
-        marginLeft: 10
+        marginRight: 5,
+        alignSelf: 'center'
     },
     coinContainer: {
         flexDirection: 'row',
@@ -194,6 +193,18 @@ const styles = StyleSheet.create({
     number: {
         fontWeight: 'bold',
         marginLeft: 5
+    },
+    priceChange:{
+        fontSize: 15,
+        fontWeight: 'bold',
+        //marginLeft: 5,
+    },
+    nameAndSymbol:{
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        marginRight: 30,
+        alignSelf: 'center'
     }
 })
 

@@ -27,7 +27,7 @@ const useERC20Balance = (props) => {
       .catch((e) => alert(e.message));
       
   };
-  console.log("chainID: " + chainId)
+  //console.log("chainID: " + chainId)
   return { fetchERC20Balance, assets };
 };
 

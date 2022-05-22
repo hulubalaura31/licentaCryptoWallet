@@ -6,7 +6,7 @@ const formatMarketData = (data) => {
 
   data.forEach(item => {
     const formattedSparkline = item.sparkline_in_7d.price
-
+    //console.log("aaaaaaaa"  + item.qty)
     const formattedItem = {
       ...item,
       sparkline_in_7d: {

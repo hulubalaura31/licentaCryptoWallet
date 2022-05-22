@@ -54,7 +54,7 @@ const ChainsLogo = ({ chain }) => {
 
 
 const Item = ({ name, logo, balance, symbol, tokenAddress, chain }) => {
-  console.log("item " + tokenAddress)
+
   const balanceFormatted = Math.round(balance * 100) / 100;
   return (
     <View style={styles.itemContainer}>

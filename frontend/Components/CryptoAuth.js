@@ -5,6 +5,7 @@ import {useMoralis} from "react-moralis";
 import { useWalletConnect } from "../WalletConnect";
 import LottieView from "lottie-react-native";
 import Animation from "../lottie.json";
+import Popover from 'react-native-popover-view';
 
 const LoginScreen = ({ navigation }) => {
   const connector = useWalletConnect();
