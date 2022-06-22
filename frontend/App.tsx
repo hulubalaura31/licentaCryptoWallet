@@ -10,7 +10,7 @@ import CryptoAuth from "./Components/CryptoAuth";
 import RecentTransactions from "./Components/RecentTransactions/RecentTransactions";
 import Assets from "./Components/Assets/Assets";
 import Transfer from "./Components/Transfer/Transfer";
-import Profile from "./Components/Learn/Learn";
+import Learn from "./Components/Learn/Learn";
 import Header from "./Components/Graphs/customControls/Header";
 import GraphsAssets from "./Components/Graphs/GraphsAssetsMainScreen";
 import News from "./Components/Assets/News";
@@ -66,14 +66,14 @@ function Home(): JSX.Element {
       />
 
       <Tab.Screen
-        name="Profile"
+        name="Learn"
         options={{
           tabBarLabel: "Learn",
           tabBarIcon: ({ color }) => (
             <FontAwesomeIcon icon={faChalkboardTeacher} color={color} size={20} />
           ),
         }}
-        component={Profile}
+        component={Learn}
       />
     </Tab.Navigator>
   );

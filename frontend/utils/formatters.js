@@ -1,4 +1,4 @@
-  export const n4 = new Intl.NumberFormat("en-us", {
+  export const balanceFormatter = new Intl.NumberFormat("en-us", {
     style: "decimal",
     minimumFractionDigits: 0,
     maximumFractionDigits: 4,
