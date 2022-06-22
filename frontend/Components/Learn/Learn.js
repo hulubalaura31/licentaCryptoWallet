@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, ScrollView, SafeAreaView } from "react-native";
-import { faAddressBook, faCoins, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { View, Text, FlatList, ScrollView, SafeAreaView } from "react-native";
 import { Card } from '@ui-kitten/components';
 import VideoPlayer from "react-native-video-player";
 import { getVideos } from '../../helpers/learningVideoConfig';
@@ -12,32 +10,32 @@ const Learn = () => {
     const fetchVideos = () => {
       const videoData = getVideos();
       setData(videoData);
-      console.log(videoData)
     }
-
     fetchVideos();
   }, [])
+
   return (
     <SafeAreaView>
       <FlatList data={data} keyExtractor={(item, index) => `${index}`}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           return (
             <ScrollView style={{ marginTop: 10 }} >
               <Card header={
                 () => (
-                  <View styles={{alignItems: 'center'}} >
-                    <Text style={Styles.title} >{item.title}</Text>
+                  <View>
+                    <Text style={{fontSize: 20, fontWeight: 'bold', alignSelf: 'center'}} >{item.title}</Text>
                   </View>
                 )}
                 footer={() => (
                   <View>
-                    <Text>Time duration: {item.time} min </Text>
+                    <Text style={{fontStyle: 'italic', paddingLeft: 5}}>Time duration: {item.time} min </Text>
                   </View>
                 )}></Card>
                 <VideoPlayer 
                 video={{uri: item.url}}
                 autoplay={false}
                 defaultMuted={false}
+                thumbnail={require("./assets/coins.png")}
                 />
             </ScrollView>
           )
@@ -48,11 +46,3 @@ const Learn = () => {
 
 
 export default Learn;
-
-const Styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    alignSelf: 'center'
-  }
-})

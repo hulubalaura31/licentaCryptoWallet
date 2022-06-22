@@ -1,13 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import useNativeBalance from '../../hooks/useNativeBalance';
+import { getBalance } from "../../hooks/infuraBalance";
+import { useMoralisDapp } from '../../providers/MoralisDappProvider/MoralisDappProvider';
+import { getChain, getNativeByChain } from '../../helpers/networkDefaultConfig';
 
 function Balance(props) {
-  const {nativeBalance} = useNativeBalance(props?.chain || chainId);
+  const [balance, setBalance] = useState(0);
+  const { walletAddress, chainId } = useMoralisDapp();
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      const sold = await getBalance(walletAddress);
+      setBalance(sold);
+      console.log(sold);
+    }
+     fetchBalance();
+  }, [])
 
   return (
     <View style={styles.itemView}>
-      <Text style={styles.name}>💰 {nativeBalance} </Text>
+      <Text style={styles.name}>💰 {parseFloat(balance).toFixed(4)} {getNativeByChain(props.chain)} - {getChain(props.chain)} </Text>
     </View>
   );
 }
