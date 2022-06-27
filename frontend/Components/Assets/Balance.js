@@ -7,10 +7,10 @@ import { getChain, getNativeByChain } from '../../helpers/networkDefaultConfig';
 function Balance(props) {
   const [balance, setBalance] = useState(0);
   const { walletAddress, chainId } = useMoralisDapp();
-
+console.log(chainId)
   useEffect(() => {
     const fetchBalance = async () => {
-      const sold = await getBalance(walletAddress);
+      const sold = await getBalance(walletAddress, chainId);
       setBalance(sold);
       console.log(sold);
     }
@@ -19,7 +19,7 @@ function Balance(props) {
 
   return (
     <View style={styles.itemView}>
-      <Text style={styles.name}>💰 {parseFloat(balance).toFixed(4)} {getNativeByChain(props.chain)} - {getChain(props.chain)} </Text>
+      <Text style={styles.crypto}>💰 {parseFloat(balance).toFixed(4)} {getNativeByChain(props.chain)} - {getChain(props.chain)} </Text>
     </View>
   );
 }
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  name: {
+  crypto: {
     fontSize: 25,
     color: 'black',
     fontWeight: '500',

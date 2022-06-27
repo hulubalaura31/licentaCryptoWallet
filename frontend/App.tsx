@@ -9,10 +9,9 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import CryptoAuth from "./Components/CryptoAuth";
 import RecentTransactions from "./Components/RecentTransactions/RecentTransactions";
 import Assets from "./Components/Assets/Assets";
-import Transfer from "./Components/Transfer/Transfer";
 import Learn from "./Components/Learn/Learn";
 import Header from "./Components/Graphs/customControls/Header";
-import GraphsAssets from "./Components/Graphs/GraphsAssetsMainScreen";
+import Graphs from "./Components/Graphs/Graphs";
 import News from "./Components/Assets/News";
 import SendCrypto from './Components/Assets/SendCrypto'
 
@@ -62,7 +61,7 @@ function Home(): JSX.Element {
             return <FontAwesomeIcon icon={faChartBar} color={color} size={20} />;
           },
         }}
-        component={GraphsAssets}
+        component={Graphs}
       />
 
       <Tab.Screen

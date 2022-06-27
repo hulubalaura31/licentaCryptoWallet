@@ -27,16 +27,18 @@ function MoralisDappProvider({children}) {
   );
 
   return (
-
+//0x373e5BE61CA80B1eac9696b8A9A7bB438fb643Af
+//0xc0bA89aF7C7c98C4Beb2a1f00d2502CF433BFdE0 -: mumbai
+//0xc0bA89aF7C7c98C4Beb2a1f00d2502CF433BFdE0 - ethereum
     <MoralisDappContext.Provider
       value={{
-        walletAddress: '0xc0bA89aF7C7c98C4Beb2a1f00d2502CF433BFdE0',
+        walletAddress: '0x373e5BE61CA80B1eac9696b8A9A7bB438fb643Af',
+        //chainId: '0x13881'
         chainId: '0x3',
       }}>
       {children}
     </MoralisDappContext.Provider>
 
-    //USE THIS DURING PRODUCTION
     // <MoralisDappContext.Provider value={{walletAddress, chainId: '0x1'}}>
     //   {children}
     // </MoralisDappContext.Provider>

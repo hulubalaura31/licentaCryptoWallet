@@ -18,18 +18,15 @@ import {
 import { ActivityIndicator } from "react-native-paper";
 import { getETHTransactions } from '../../hooks/retrievetransactions';
 import Popover from 'react-native-popover-view';
-const Item = ({ Moralis, hash, }) => (
+const Item = ({ hash }) => (
   <View style={styles.itemContainer}>
     <View style={styles.itemView}>
       <View style={{ flex: 3, justifyContent: "center" }}>
         <Text style={styles.textHash}>🔵  Hash: {getEllipsisTxt(hash, 7)}</Text>
       </View>
     </View>
-    <Divider />
-
   </View>
 );
-
 
 function RecentTransactions() {
   const { Moralis } = useMoralis();
@@ -45,14 +42,12 @@ function RecentTransactions() {
   }, [])
 
 
-  const renderItem = ({ item }) => {
-    //console.log(item.blockHash)
+  const TransactionItem = ({ item }) => {
     return (
       <Popover popoverStyle={{ width: 250, height: 190, borderRadius: 30 }}
         from={(
           <TouchableOpacity>
             <Item
-              Moralis={Moralis}
               hash={item.hash}
             />
           </TouchableOpacity>
@@ -70,20 +65,19 @@ function RecentTransactions() {
     );
   };
 
-  
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.viewContainer}>
           <Text style={styles.headerText} category="h4">
-            Recent transactions
+            Transactions
           </Text>
           {data ? (
             <FlatList
               data={data}
-              renderItem={renderItem}
+              renderItem={TransactionItem}
               keyExtractor={(item, index) => index.toString()}
-              scrollEnabled={false}
+              scrollEnabled={true}
             />
           ) : (
             <ActivityIndicator />

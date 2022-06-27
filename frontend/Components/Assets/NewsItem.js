@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions, Linking } 
 const screenWidth = Dimensions.get("window").width;
 
 
-const CoinItem = ({ marketNews }) => {
+const NewsItem = ({ marketNews }) => {
     const { category, country, description, link, title} = marketNews;
 
     const onPressGoToNews = (link) => {
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default CoinItem;
+export default NewsItem;

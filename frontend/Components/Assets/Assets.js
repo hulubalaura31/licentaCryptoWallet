@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView, Text, StyleSheet, Image, TouchableOpacity, View, Linking } from "react-native";
 import { useMoralisDapp } from '../../providers/MoralisDappProvider/MoralisDappProvider';
 import eth from './eth-blue.png'
-import coins from './coins.png'
+import coins from './coins3.png'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMoneyCheck, faPaperPlane, faInfo } from '@fortawesome/free-solid-svg-icons';
 import Balance from "./Balance";
@@ -13,7 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 export default function Assets() {
   const { walletAddress, chainId } = useMoralisDapp();
   const [color, setColor] = useState("white");
-  const picture = chainId == "0x1" || "0x3" || "0x4" || "0x2a" || "0x5" ? eth : coins;
+  console.log("assets chainid" + chainId);
+  const picture = ["0x1","0x3","0x4","0x2a","0x5"].indexOf(chainId) > -1? eth : coins;
   const handleGoToFaucet = () => {
     Linking.openURL(
       `${getFaucet(chainId)}`
@@ -33,7 +34,7 @@ export default function Assets() {
 
   return (
     <SafeAreaView style={styles.areaContainer}>
-      <Image source={picture} style={{ width: 180, alignSelf: 'center', marginTop: 30 }} />
+      <Image source={picture} style={{ width: 180, alignSelf: 'center', marginTop: 20 }} />
       <Balance chain={chainId} />
       <View style={styles.buttonsContainer}>
         <Popover popoverStyle={{ width: 250, height: 150, borderRadius: 30 }}

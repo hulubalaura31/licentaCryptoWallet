@@ -1,39 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import EthLogo from './ethereum-icon-20.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { View, StyleSheet, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
+import {formatMarketCapForGraphs} from '../../utils/formatters';
 import Popover from 'react-native-popover-view';
 import {
     LineChart
 } from "react-native-chart-kit";
 
-const screenWidth = Dimensions.get("window").width;
 
-
-const CoinItem = ({ marketCoin }) => {
-    const { id, name, current_price, market_cap_rank, price_change_percentage_24h, symbol, market_cap, image, sparkline_in_7d, price_change_percentage_7d_in_currency } = marketCoin;
+const GraphItem = ({ marketCoin }) => {
+    const { id, name, current_price, price_change_percentage_24h, symbol, market_cap, image, sparkline_in_7d } = marketCoin;
     const [data, setData] = useState(null);
     const [rsi, setRsi] = useState(null);
-    //console.log(sparkline_in_7d)
-    const formatMarketCap = (mCap) => {
-        if (mCap > 1e12) {
-            return `${(mCap / 1e12).toFixed(3)} T`;
-        }
-        if (mCap > 1e9) {
-            return `${(mCap / 1e9).toFixed(3)} B`;
-        }
-        if (mCap > 1e6) {
-            return `${(mCap / 1e6).toFixed(3)} M`;
-        }
-        if (mCap > 1e3) {
-            return `${(mCap / 1e3).toFixed(3)} K`;
-        }
-        return mCap;
-    }
 
-    const transformData = (data) => {
+    const formatData = (data) => {
         let x = [];
         data.map((each, index) => {
             x.push(each)
@@ -49,7 +30,7 @@ const CoinItem = ({ marketCoin }) => {
             RSIvalues.push(result);
             x.splice(0, 1);
         }
-        //console.log(RSIvalues);
+        
         useEffect(() => {
             setRsi(RSIvalues);
         }, [])
@@ -57,22 +38,24 @@ const CoinItem = ({ marketCoin }) => {
     }
 
     const calculateRSI = (prices, Tolerance) => {
-        var sumGain = 0;
-        var sumLoss = 0;
+        var totalGain = 0;
+        var totalLoss = 0;
         for (var i = 1; i < prices.length; i++) {
             var difference = prices[i] - prices[i - 1];
             if (difference >= 0) {
-                sumGain += difference;
+                totalGain += difference;
             }
             else {
-                sumLoss -= difference;
+                totalLoss -= difference;
             }
         }
 
-        if (sumGain == 0) return 0;
-        if (Math.abs(sumLoss) >= Tolerance) return 100;
+        if (totalGain == 0) {
+            return 0;
+        }
+        if (Math.abs(totalLoss) >= Tolerance) return 100;
 
-        var relativeStrength = sumGain / sumLoss;
+        var relativeStrength = totalGain / totalLoss;
 
         return 100.0 - (100.0 / (1 + relativeStrength));
     }
@@ -100,7 +83,7 @@ const CoinItem = ({ marketCoin }) => {
                                 <FontAwesomeIcon icon={price_change_percentage_24h < 0 ? faArrowDown : faArrowUp} size={15} color={price_change_percentage_24h < 0 ? 'red' : 'green'}  />
                                 <Text style={styles.priceChange} >{price_change_percentage_24h.toFixed(2)}%</Text>
                             </View>
-                            <Text style={{ display: "flex", alignItems: "flex-end" }}>M. Cap:{formatMarketCap(market_cap)}</Text>
+                            <Text style={{ display: "flex", alignItems: "flex-end" }}>M. Cap:{formatMarketCapForGraphs(market_cap)}</Text>
                         </View>
                     </TouchableOpacity>
                 )} >
@@ -111,7 +94,7 @@ const CoinItem = ({ marketCoin }) => {
                             data={{
                                 datasets: [
                                     {
-                                        data: transformData(sparkline_in_7d.price)
+                                        data: formatData(sparkline_in_7d.price)
                                     }
                                 ]
                             }}
@@ -209,4 +192,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default CoinItem;
+export default GraphItem;

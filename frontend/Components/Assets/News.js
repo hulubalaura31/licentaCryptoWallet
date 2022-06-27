@@ -11,7 +11,6 @@ const News = () => {
         const marketData = await getMarketNews();
         setData(marketData.results);
       }
-      
       fetchMarketData();
     }, [])
   //console.log(data)
