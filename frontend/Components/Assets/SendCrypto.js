@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, Modal } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, Alert } from 'react-native';
 import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useMoralisDapp } from '../../providers/MoralisDappProvider/MoralisDappProvider';
 import { Button } from "@ui-kitten/components";
@@ -7,6 +7,7 @@ import { TextInput } from "react-native-paper";
 import { faAddressBook, faCoins, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { ScrollView } from "react-native-gesture-handler";
+import { sendCrypto } from '../../hooks/infuraBalance';
 
 const color = "#0B3066";
 export default function Transfer() {
@@ -15,6 +16,7 @@ export default function Transfer() {
   const [receiver, setReceiver] = useState();
   const [token, setToken] = useState();
   const [amount, setAmount] = useState();
+  const [message, setMessage] = useState();
 
   const [transferOptionsState, setTransferOptionsState] = useState();
   const { fetch, error, isFetching } = useWeb3Transfer(transferOptionsState);
@@ -25,34 +27,45 @@ export default function Transfer() {
   const tokenValue = ethChains.indexOf(chainId) > -1 ? "ETH" : chainId == " 0xa86a" ? "AVAX" : chainId == '0x61' ? 'BNB' : 'MATIC';
 
 
-  useEffect(() => {
-    if (amount && receiver) {
-      setTransferOptionsState({
-        amount: Moralis.Units.ETH(0.5),
-        receiver: receiver,
-        type: "native",
-        contractAddress: tokenAddress,
-      });
-    }
-  }, [token, amount, receiver]);
 
-  const [showModal, setShowModal] = useState(false);
-  const sendTransaction = () => {
+  const sendTransaction = async () => {
     try {
-      fetch();
+      const messageReceived = await sendCrypto(receiver, amount).then(() => { 
+        setMessage(messageReceived); 
+        showConfirmation();
+      }).catch((error) => {
+        setMessage(messageReceived); 
+        showErrorMessage();
+      })
     } catch (err) {
       console.log(err)
     }
   }
 
-  const resetInput = () => {
-    setAmount("");
-    setReceiver("")
-  }
+  const showConfirmation = () =>
+    Alert.alert(
+      "Successful transaction",
+      message,
+      [
+        {
+          text: "Ok",
+          style: "cancel"
+        }
+      ]
+    );
 
-  function openAlertBox() {
-    setShowModal(true);
-  }
+
+    const showErrorMessage = () =>
+    Alert.alert(
+      "Transaction failed",
+      message,
+      [
+        {
+          text: "Close",
+          style: "cancel"
+        }
+      ]
+    );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -118,7 +131,7 @@ export default function Transfer() {
                   : styles.diabledButton
               }
               labelStyle={{ color: "white", fontSize: 20 }}
-              onPress={openAlertBox}>
+              onPress={sendTransaction}>
               Transfer
             </Button>
 
@@ -184,8 +197,5 @@ const styles = StyleSheet.create({
   },
   flex4: {
     flex: 4,
-  },
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
   }
 });

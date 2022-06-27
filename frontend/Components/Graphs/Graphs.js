@@ -1,15 +1,13 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, Image, FlatList, Button } from 'react-native';
-import CoinItem from './GraphListItem';
+import GraphItem from './GraphListItem';
 import dummy1 from './testData/dummy2Cryptocurrencies.json'
 import { getMarketData } from '../../hooks/retrieveCryptoPrices';
 import { SearchBar } from 'react-native-elements';
 
 
-const GraphsAssets = (props) => {
-  const [selectedCoin, setSelectedCoin] = useState(null);
+const Graphs = (props) => {
   const [search, setSearch] = useState(null);
-  const bottomSheetModalRef = useRef(null);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
@@ -32,9 +30,7 @@ const GraphsAssets = (props) => {
     }
   };
 
-    /* replace dummy with fetched data  */
-  return (
-    
+  return (  
     <SafeAreaView style={styles.itemContainer}>
         <SearchBar
         placeholder="Search by name..."
@@ -42,9 +38,8 @@ const GraphsAssets = (props) => {
         value={search}
         style={styles.searchbarStyle}
       />
-      <FlatList data={filteredData} renderItem={({item}) => <CoinItem marketCoin={item} /> } />
+      <FlatList data={filteredData} renderItem={({item}) => <GraphItem marketCoin={item} /> } />
     </SafeAreaView>
-
   );
 };
 const styles = StyleSheet.create({
@@ -57,4 +52,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default GraphsAssets;
+export default Graphs;
