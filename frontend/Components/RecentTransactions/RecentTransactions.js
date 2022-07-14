@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { getEllipsisTxt } from "../../utils/formatters";
 import { useMoralisDapp } from '../../providers/MoralisDappProvider/MoralisDappProvider';
-import { Divider, Modal, Button, Card } from "@ui-kitten/components";
 import {
   TouchableOpacity,
 } from "react-native-gesture-handler";

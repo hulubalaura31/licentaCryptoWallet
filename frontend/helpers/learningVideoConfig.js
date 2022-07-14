@@ -1,19 +1,19 @@
 export const defaultConfig = [
     {
         id: 1,
-        url: 'https://tinyurl.com/ye42jb9w',
+        url: 'https://tinyurl.com/y4ys48hm',
         title: 'What are Crypto Wallets',
         time: "6:02"
     },
     {
         id: 2,
-        url: 'https://tinyurl.com/2p82twsc',
+        url: 'https://tinyurl.com/mrx7tnnp',
         title: 'Crypto Wallets Explained',
         time: "19:41"
     },
     {
         id: 3,
-        url: 'https://tinyurl.com/3kjhx989',
+        url: 'https://tinyurl.com/mtvrun7b',
         title: 'How Cryptocurrency ACTUALLY works',
         time: "13:54"
     },

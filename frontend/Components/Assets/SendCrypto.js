@@ -30,21 +30,21 @@ export default function Transfer() {
 
   const sendTransaction = async () => {
     try {
-      const messageReceived = await sendCrypto(receiver, amount).then(() => { 
-        setMessage(messageReceived); 
+      await sendCrypto(receiver, amount).then((receipt) => {
+        console.log("receipt: " + receipt);
+        setMessage("Block hash: " + receipt);
         showConfirmation();
-      }).catch((error) => {
-        setMessage(messageReceived); 
-        showErrorMessage();
-      })
+      });
+      
     } catch (err) {
       console.log(err)
+      setMessage(error);
+      showErrorMessage();
     }
   }
 
   const showConfirmation = () =>
     Alert.alert(
-      "Successful transaction",
       message,
       [
         {
@@ -55,9 +55,9 @@ export default function Transfer() {
     );
 
 
-    const showErrorMessage = () =>
+  const showErrorMessage = () =>
     Alert.alert(
-      "Transaction failed",
+      //"Transaction failed",
       message,
       [
         {
