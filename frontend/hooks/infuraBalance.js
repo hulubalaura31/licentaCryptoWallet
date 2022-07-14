@@ -33,22 +33,24 @@ export const sendCrypto = async (receiver, amount) => {
         // const account1 = '0x373e5BE61CA80B1eac9696b8A9A7bB438fb643Af' 
         // const account2 = '0xc0bA89aF7C7c98C4Beb2a1f00d2502CF433BFdE0' 
         if(amount.includes(",")){
-            amount = amount.replace(",", ".");
+            amount = amount.replace(",", "."); //0489c85523d91433aff3e82de608f0717558c9657b885cdda9d5fd40c1ef4a12
             console.log(amount)
         }
-        const privateKey = '0489c85523d91433aff3e82de608f0717558c9657b885cdda9d5fd40c1ef4a12' //'269d1b34000ce38be472eaeb4c40bf04d67c2348e86fc1fbef5134fa9c940cfa' (269 accpunt 2)
+        const privateKey = '269d1b34000ce38be472eaeb4c40bf04d67c2348e86fc1fbef5134fa9c940cfa' //'269d1b34000ce38be472eaeb4c40bf04d67c2348e86fc1fbef5134fa9c940cfa' (269 accpunt 2)
         var web3 = new Web3(rpcURLforRopsten);
+        console.log("sendcrypto method")
         const SingedTransaction = await web3.eth.accounts.signTransaction({
             to:  receiver,
             value: web3.utils.toHex(web3.utils.toWei(amount, 'ether')),
             gas: web3.utils.toHex(21000)
        },  privateKey  );
        var rasponseToSend;
-       web3.eth.sendSignedTransaction(SingedTransaction.rawTransaction).then((receipt) => {
-             console.log(receipt);
-             rasponseToSend = receipt;
+       await web3.eth.sendSignedTransaction(SingedTransaction.rawTransaction).then((receipt) => {            
+             rasponseToSend = receipt["blockHash"];      
+             //return rasponseToSend;
        }).catch(err => console.log(err.message));
-       return rasponseToSend;
+       console.log(rasponseToSend + " typeof " + typeof rasponseToSend);
+      return rasponseToSend;
     } catch (error) {
         console.error(error);
     }
