@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, Alert } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, ActivityIndicator, Clipboard, TouchableOpacity } from 'react-native';
 import { useMoralis, useWeb3Transfer } from "react-moralis";
 import { useMoralisDapp } from '../../providers/MoralisDappProvider/MoralisDappProvider';
 import { Button } from "@ui-kitten/components";
@@ -15,8 +15,10 @@ export default function Transfer() {
   const { walletAddress, chainId } = useMoralisDapp();
   const [receiver, setReceiver] = useState();
   const [token, setToken] = useState();
+  const [blockHash, setBlockHash] = useState();
   const [amount, setAmount] = useState();
   const [message, setMessage] = useState();
+  const [isCalling, setIsCalling] = useState(false);
 
   const [transferOptionsState, setTransferOptionsState] = useState();
   const { fetch, error, isFetching } = useWeb3Transfer(transferOptionsState);
@@ -25,47 +27,29 @@ export default function Transfer() {
   const tokenAddress = token ? token.token_address : "";
   const ethChains = ["0x3", "0x4", "0x2a", "0x5", "0x1"]
   const tokenValue = ethChains.indexOf(chainId) > -1 ? "ETH" : chainId == " 0xa86a" ? "AVAX" : chainId == '0x61' ? 'BNB' : 'MATIC';
+  //var messageToShow = "";
 
-
+  const copyToClipboard = () => {
+    Clipboard.setString(blockHash);
+  };
 
   const sendTransaction = async () => {
     try {
+      setIsCalling(true);
       await sendCrypto(receiver, amount).then((receipt) => {
         console.log("receipt: " + receipt);
+        setBlockHash(receipt);
         setMessage("Block hash: " + receipt);
-        showConfirmation();
+        setIsCalling(false);
       });
-      
+
     } catch (err) {
       console.log(err)
       setMessage(error);
-      showErrorMessage();
+      setIsCalling(false);
     }
   }
 
-  const showConfirmation = () =>
-    Alert.alert(
-      message,
-      [
-        {
-          text: "Ok",
-          style: "cancel"
-        }
-      ]
-    );
-
-
-  const showErrorMessage = () =>
-    Alert.alert(
-      //"Transaction failed",
-      message,
-      [
-        {
-          text: "Close",
-          style: "cancel"
-        }
-      ]
-    );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -134,7 +118,32 @@ export default function Transfer() {
               onPress={sendTransaction}>
               Transfer
             </Button>
-
+            <ActivityIndicator
+              size="large"
+              style={
+                isCalling
+                  ? styles.visibleIndicator
+                  : styles.hiddenIndicator
+              } />
+          </View>
+          <View style={styles.viewContainer}>
+            <TouchableOpacity
+              style={
+                isCalling
+                  ? styles.hiddenButton
+                  : styles.visibleButton
+              }
+              onPress={() => copyToClipboard()}>
+              <Text style={styles.textInsideBtn}>
+                Last block hash:
+              </Text>
+              <Text style={styles.textInsideBtn}>
+                {blockHash}.
+              </Text>
+              <Text style={styles.textInsideBtn}>
+                Press on the block to copy it.
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -197,5 +206,32 @@ const styles = StyleSheet.create({
   },
   flex4: {
     flex: 4,
+  },
+  hiddenIndicator: {
+    opacity: 0,
+    height: 0
+  },
+  visibleIndicator: {
+    opacity: 100,
+    height: 50,
+    marginTop: 30
+  },
+  hiddenButton: {
+    opacity: 0,
+    height: 0
+  },
+  visibleButton: {
+    opacity: 100,
+    height: 100,
+    marginTop: 30,
+    backgroundColor: "#4CA987",
+    borderRadius: 10,
+    width: 380
+  },
+  textInsideBtn:{
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 5,
+    alignSelf: 'center'
   }
 });
