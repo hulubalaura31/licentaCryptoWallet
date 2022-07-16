@@ -17,6 +17,10 @@ import {
 import { ActivityIndicator } from "react-native-paper";
 import { getETHTransactions } from '../../hooks/retrievetransactions';
 import Popover from 'react-native-popover-view';
+import { SearchBar } from 'react-native-elements';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faRedo } from '@fortawesome/free-solid-svg-icons';
+
 const Item = ({ hash }) => (
   <View style={styles.itemContainer}>
     <View style={styles.itemView}>
@@ -31,15 +35,35 @@ function RecentTransactions() {
   const { Moralis } = useMoralis();
   const { walletAddress, chainId } = useMoralisDapp();
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
     const getTransactions = async () => {
-      const transactionData = await getETHTransactions(walletAddress);
+      const transactionData = await getETHTransactions(walletAddress, chainId);
       setData(transactionData);
+      setFilteredData(transactionData)
       console.log(transactionData[0])
     }
     getTransactions();
   }, [])
 
+
+
+  updateSearch = (event) => {
+    setSearch(event);
+    if (event) {
+      setFilteredData(data.filter(x => x.blockHash.includes(event)))
+    } else if (event == '' || event == null || event == undefined) {
+      setFilteredData(data)
+    }
+  };
+
+
+  const refreshTransactions = async () => {
+    const transactionData = await getETHTransactions(walletAddress, chainId);
+    setData(transactionData);
+    setFilteredData(transactionData)
+  }
 
   const TransactionItem = ({ item }) => {
     return (
@@ -47,33 +71,48 @@ function RecentTransactions() {
         from={(
           <TouchableOpacity>
             <Item
-              hash={item.hash}
+              hash={item.blockHash}
             />
           </TouchableOpacity>
         )} >
-          <Text style={styles.info}>Transaction details</Text>
-          <View style={styles.itemView}>
-        <View style={{ flex: 1, justifyContent: "center" }}>
-          <Text style={styles.text}>Block Hash: {getEllipsisTxt(item.blockHash, 7)}</Text>
-          <Text style={styles.text}>Block No: {item.blockNumber}</Text>
-          <Text style={styles.text}>Gas Used: {parseFloat(Moralis.Units.FromWei(item.gasUsed, 9))}</Text>
-          <Text style={styles.text}>Gas Price: {parseFloat(Moralis.Units.FromWei(item.gasPrice, 9))}</Text>
+        <Text style={styles.info}>Transaction details</Text>
+        <View style={styles.itemView}>
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <Text style={styles.text}>Block Hash: {getEllipsisTxt(item.blockHash, 7)}</Text>
+            <Text style={styles.text}>Block No: {item.blockNumber}</Text>
+            <Text style={styles.text}>Gas Used: {parseFloat(Moralis.Units.FromWei(item.gasUsed, 9))}</Text>
+            <Text style={styles.text}>Gas Price: {parseFloat(Moralis.Units.FromWei(item.gasPrice, 9))}</Text>
+          </View>
         </View>
-        </View>
-        </Popover>
+      </Popover>
     );
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.viewContainer}>
-          <Text style={styles.headerText} category="h4">
-            Transactions
-          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.headerText} category="h4">
+              Transactions
+            </Text>
+            <TouchableOpacity style={styles.iconRefresh} onPress={refreshTransactions}>
+              <FontAwesomeIcon icon={faRedo} size={15} color="#0B3066" />
+            </TouchableOpacity>
+          </View>
+          <SearchBar
+            placeholder="Search by block hash..."
+            onChangeText={updateSearch}
+            placeholderTextColor={'#g5g5g5'}
+            inputStyle={{ backgroundColor: 'white' }}
+            containerStyle={{ backgroundColor: 'white', borderWidth: 1, borderRadius: 5 }}
+            value={search}
+            style={styles.searchbarStyle}
+          />
           {data ? (
             <FlatList
-              data={data}
+              data={filteredData}
               renderItem={TransactionItem}
               keyExtractor={(item, index) => index.toString()}
               scrollEnabled={true}
@@ -140,6 +179,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontStyle: 'italic',
     fontWeight: 'bold'
+  },
+  iconRefresh: {
+    paddingTop: 10,
+    paddingLeft: 30
   }
 });
 
