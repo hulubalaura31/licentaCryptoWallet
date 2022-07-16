@@ -34,7 +34,6 @@ const NewsItem = ({ marketNews }) => {
                     </Popover>
                 </View>
             </View>
-            {/* </TouchableOpacity> */}
         </View>
     );
 }
