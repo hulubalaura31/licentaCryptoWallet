@@ -10,6 +10,7 @@ const News = () => {
       const fetchMarketData = async () => {
         const marketData = await getMarketNews();
         setData(marketData.results);
+        console.log(marketData.results[0].link)
       }
       fetchMarketData();
     }, [])
